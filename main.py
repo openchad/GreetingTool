@@ -29,14 +29,26 @@ class Tool(ToolBase):
         },
         "required": ["greeting"],
     }
+
+    fields = [
+        {
+            'name': 'Prefix',
+            'value': {
+                'type': 'string',
+                'placeholder': 'Optional prefix...'
+            }
+        },
+    ]
+
     allowed_callers = ["direct", "code_execution", "mcp_client"]
 
     async def execute(self, **kwargs) -> Dict[str, Any]:
         greeting: str = kwargs.get("greeting", "").strip()
+        prefix: str = self.get_field("Prefix") or ""
 
         if not greeting:
             return {"error": "greeting is required and must not be empty."}
 
         return {
-            "result": greeting,
+            "result": prefix + greeting,
         }
